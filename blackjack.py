@@ -10,6 +10,7 @@ class Card:
     def __init__(self, rank, suit):
         self.rank = rank
         self.suit = suit
+        self.value = values[self.rank]
 
     def __str__(self):
         f'{self.rank} of {self.suit}'
@@ -18,40 +19,48 @@ class Deck:
     def __init__(self):
         self.deck = [Card(rank, suit) for rank in ranks for suit in suits]
         
-
-
-
-
-### The game ###
-
-class Player:
-    def __init__(self):
-        self.score = 0
-
-    def hit_or_stand(self):
-        move = input('hit or stand?')
-
-    def hit(self):
-        pass
-
-    def stand(self):
-        pass
-
-
-
-        
-class Dealer:
-    def __init__(self, deck):
-        self.deck = deck
-        self.cards = []
-
-    def initial_deal(self, player):
-        # take two random cards out of the deck, add values, add to players score. Discard cards. Repeat for self
-        pass
-
     def shuffle(self):
         random.shuffle(self.deck)
 
+    def deal(self, player):
+        dealt_card = self.deck.pop()
+        player.cards.append(dealt_card)
+        player.score.append(dealt_card)
+        if dealt_card.rank == 'ace':
+            player.aces += 1
+
+
+
+class Hand:
+    def __init__(self):
+        self.cards = []
+        self.score = 0
+        self.aces = 0
+    
+    def add_card(self, card): # card arg is the dealt_card from deck.deal
+        self.cards.append(card)
+        self.score += card.value
+
+
+
+
+
+
+
+# actions #
+def hit_or_stand():
+    playing = True
+    while playing:
+        move = input('type h for hit, s for stand')
+        if move == 'h':
+            return hit()
+        if move == 's':
+            pass
+
+def hit(deck, hand):
+    new_card = deck.deal
+    hand.add_card(new_card)
+    
 
 
 # the game #
@@ -59,13 +68,19 @@ class Dealer:
 def play_blackjack(player):
     while True:
         deck = Deck()
-        dealer = Dealer(deck)
-        player = Player()
+        dealer_hand = Hand()
+        player_hand = Hand()
 
-        dealer.deal()
+        # cards are shuffled and dealt
+        deck.shuffle()
+        deck.deal(dealer_hand)
+        deck.deal(dealer_hand)
+        deck.deal(player_hand)
+        deck.deal(player_hand)
+        
+        # the player is asked if they want to hit or stand
+            hit_or_stand()
 
-        player.hit_or_stand()
-        # hit or stand?
 
 
 # dealer deals two cards to each player and two to themself
